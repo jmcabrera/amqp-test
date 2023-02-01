@@ -25,6 +25,7 @@ amqp.connect(
         " [*] Waiting for messages in %s. To exit press CTRL+C",
         queue
       );
+      let counter = 5;
       channel.consume(
         queue,
         function (msg) {
@@ -32,7 +33,9 @@ amqp.connect(
           setTimeout(function () {
             console.log(" [x] Done %s", msg.content.toString());
             channel.ack(msg);
-          }, 1000);
+          }, 1000 * counter);
+          // Default to lowest value 1
+          counter = counter > 1 ? counter-1 : 1;
         },
         {
           // manual acknowledgment mode,
